@@ -1,0 +1,32 @@
+build:
+  nodes:
+    analysis:
+      project_setup:
+        override:
+          - 'true'
+      tests:
+        override:
+          - php-scrutinizer-run
+    tests:
+      environment:
+        variables:
+          DATABASE_HOST: 'localhost'
+          DATABASE_DBNAME: 'scrutinizer'
+          DATABASE_USER: 'scrutinizer'
+          DATABASE_PASSWORD: 'scrutinizer'
+      services:
+        postgres: 10
+      tests:
+        override:
+          - command: ./vendor/bin/phpunit --coverage-clover clover.xml
+            coverage:
+              file: clover.xml
+              format: 'php-clover'
+
+filter:
+  excluded_paths:
+    - 'tests/*'
+checks:
+  php: true
+coding_style:
+  php: {  }
