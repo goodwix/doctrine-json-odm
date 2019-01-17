@@ -1,0 +1,29 @@
+version: '3'
+
+volumes:
+  composer_data:
+
+services:
+  json_odm:
+    container_name: json_odm
+    build:
+      context: .
+    environment:
+      DATABASE_HOST: 'json_odm_postgres'
+      DATABASE_DBNAME: 'json_odm_db'
+      DATABASE_USER: 'user'
+      DATABASE_PASSWORD: 'password'
+    depends_on:
+      - json_odm_postgres
+    volumes:
+      - .:/app
+
+  json_odm_postgres:
+    container_name: json_odm_postgres
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_DB: 'json_odm_db'
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'password'
+    ports:
+      - "5432:5432"

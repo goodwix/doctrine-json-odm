@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.1/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         bootstrap="vendor/autoload.php"
+>
+    <php>
+        <ini name="error_reporting" value="-1" />
+        <env name="APP_ENV" value="test" />
+        <env name="APP_DEBUG" value="1" />
+        <env name="APP_SECRET" value="s$cretf0rt3st" />
+        <env name="KERNEL_DIR" value="tests/Resources/Symfony" />
+        <env name="KERNEL_CLASS" value="Goodwix\DoctrineJsonOdm\Tests\Resources\Symfony\Kernel" />
+        <env name="SHELL_VERBOSITY" value="-1" />
+        <!-- define your env variables for the test env here -->
+
+        <!-- ###+ symfony/framework-bundle ### -->
+        <env name="APP_ENV" value="dev"/>
+        <env name="APP_SECRET" value="1b9ebc94af0c9690bacda3cf42410cb6"/>
+        <!-- ###- symfony/framework-bundle ### -->
+
+        <!-- ###+ doctrine/doctrine-bundle ### -->
+        <!-- Format described at http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#connecting-using-a-url -->
+        <!-- For an SQLite database, use: "sqlite:///%kernel.project_dir%/var/data.db" -->
+        <!-- Configure your db driver and server_version in config/packages/doctrine.yaml -->
+        <env name="DATABASE_URL" value="mysql://db_user:db_password@127.0.0.1:3306/db_name"/>
+        <!-- ###- doctrine/doctrine-bundle ### -->
+    </php>
+
+    <testsuites>
+        <testsuite name="functional">
+            <directory suffix=".php">./tests/Functional</directory>
+        </testsuite>
+        <testsuite name="unit">
+            <directory suffix=".php">./tests/Unit</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>src</directory>
+        </whitelist>
+    </filter>
+</phpunit>

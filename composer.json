@@ -1,0 +1,40 @@
+{
+    "name": "goodwix/doctrine-json-odm",
+    "description": "JSON Object-Document Mapping bundle for Symfony and Doctrine",
+    "keywords": ["ORM", "ODM", "JSON", "Doctrine", "Symfony", "PostgreSQL", "database"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Igor Lazarev",
+            "email": "ilazarev@goodwix.team"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "ext-json": "*",
+        "doctrine/orm": "^2.5",
+        "symfony/property-access": "^4.0",
+        "symfony/property-info": "^4.0",
+        "symfony/serializer": "^4.0"
+    },
+    "require-dev": {
+        "doctrine/doctrine-bundle": "^1.6",
+        "symfony/framework-bundle": "^4.0",
+        "symfony/expression-language": "^4.0",
+        "symplify/easy-coding-standard": "^5.0",
+        "phake/phake": "^3.0",
+        "phpunit/phpunit": "^7.0",
+        "roave/security-advisories": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Goodwix\\DoctrineJsonOdm\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Goodwix\\DoctrineJsonOdm\\Tests\\": "tests/"
+        }
+    }
+}
