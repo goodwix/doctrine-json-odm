@@ -1,5 +1,9 @@
 # Doctrine JSON ODM library
 
+[![Build Status](https://scrutinizer-ci.com/g/goodwix/doctrine-json-odm/badges/build.png?b=master)](https://scrutinizer-ci.com/g/goodwix/doctrine-json-odm/build-status/master)
+[![Code Coverage](https://scrutinizer-ci.com/g/goodwix/doctrine-json-odm/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/goodwix/doctrine-json-odm/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/goodwix/doctrine-json-odm/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/goodwix/doctrine-json-odm/?branch=master)
+
 Inspired by <https://github.com/dunglas/doctrine-json-odm>
 
 This is beta version of library. Main differences from Dunglas library:
