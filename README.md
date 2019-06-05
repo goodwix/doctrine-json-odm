@@ -128,10 +128,21 @@ $documentStorage->document->description = 'ODM document description';
 To manually register Doctrine ODM types use [`ODMType::registerODMType()`](https://github.com/goodwix/doctrine-json-odm/blob/36860ddaddc10e9ea33b2986b17009db979a0026/src/Type/ODMType.php#L100) method.
 
 ```php
-$entityClass = \YourAppNamespace\ODM\Document::class;
-$serializer = new \Symfony\Component\Serializer\Serializer(...);
+require_once __DIR__.'/../vendor/autoload.php';
 
-ODMType::registerODMType($entityClass, $serializer);
+use Goodwix\DoctrineJsonOdm\Type\ODMType;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class Document { }
+
+ODMType::registerODMType(
+    Document::class,
+    new class implements SerializerInterface
+    {
+        public function serialize($data, $format, array $context = [])  { /* Implement serialize() method. */ }
+        public function deserialize($data, $type, $format, array $context = [])  { /* Implement deserialize() method. */ }
+    }
+);
 ```
 
 ### Examples with Symfony application
