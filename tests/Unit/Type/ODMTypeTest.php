@@ -45,14 +45,13 @@ class ODMTypeTest extends TestCase
         $this->assertSame($this->serializer, $serializer);
     }
 
-    /**
-     * @test
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessageRegExp /An instance of .* must be available. Call the "setSerializer" method./
-     */
+    /** @test */
     public function getSerializer_noSerializerIsSet_exceptionThrown(): void
     {
         $type = $this->createODMType();
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessageRegExp('/An instance of .* must be available. Call the "setSerializer" method./');
 
         $type->getSerializer();
     }
@@ -89,14 +88,13 @@ class ODMTypeTest extends TestCase
         $this->assertSame(self::class, $entityClass);
     }
 
-    /**
-     * @test
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage ODM entity class name must be available. Call the "setEntityClass" method.
-     */
+    /** @test */
     public function getEntityClass_noEntityClassIsSet_exceptionThrown(): void
     {
         $type = $this->createODMType();
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('ODM entity class name must be available. Call the "setEntityClass" method.');
 
         $type->getEntityClass();
     }
@@ -172,22 +170,21 @@ class ODMTypeTest extends TestCase
     public function registerODMType_entityClassAndSerializer_doctrineTypeRegisteredWithEntityClassAndSerializer(): void
     {
         ODMType::registerODMType(DummyODM::class, $this->serializer);
-        /** @var \Goodwix\DoctrineJsonOdm\Type\ODMType $type */
-        $type = \Goodwix\DoctrineJsonOdm\Type\ODMType::getType(DummyODM::class);
+        /** @var ODMType $type */
+        $type = ODMType::getType(DummyODM::class);
 
-        $this->assertTrue(\Goodwix\DoctrineJsonOdm\Type\ODMType::hasType(DummyODM::class));
+        $this->assertTrue(ODMType::hasType(DummyODM::class));
         $this->assertSame(DummyODM::class, $type->getEntityClass());
         $this->assertSame($this->serializer, $type->getSerializer());
     }
 
-    /**
-     * @test
-     * @expectedException \DomainException
-     * @expectedExceptionMessage Class "not_a_class" does not exist.
-     */
+    /** @test */
     public function registerODMType_entityClassIsNotAClass_exceptionThrown(): void
     {
-        \Goodwix\DoctrineJsonOdm\Type\ODMType::registerODMType('not_a_class', $this->serializer);
+        $this->expectException(\DomainException::class);
+        $this->expectExceptionMessage('Class "not_a_class" does not exist.');
+
+        ODMType::registerODMType('not_a_class', $this->serializer);
     }
 
     public function emptyValueProvider(): array
@@ -198,15 +195,15 @@ class ODMTypeTest extends TestCase
         ];
     }
 
-    private function createODMType(): \Goodwix\DoctrineJsonOdm\Type\ODMType
+    private function createODMType(): ODMType
     {
-        if (\Goodwix\DoctrineJsonOdm\Type\ODMType::hasType(self::ODM_TYPE_NAME)) {
-            \Goodwix\DoctrineJsonOdm\Type\ODMType::overrideType(self::ODM_TYPE_NAME, \Goodwix\DoctrineJsonOdm\Type\ODMType::class);
+        if (ODMType::hasType(self::ODM_TYPE_NAME)) {
+            ODMType::overrideType(self::ODM_TYPE_NAME, ODMType::class);
         } else {
-            \Goodwix\DoctrineJsonOdm\Type\ODMType::addType(self::ODM_TYPE_NAME, \Goodwix\DoctrineJsonOdm\Type\ODMType::class);
+            ODMType::addType(self::ODM_TYPE_NAME, ODMType::class);
         }
 
-        return \Goodwix\DoctrineJsonOdm\Type\ODMType::getType(self::ODM_TYPE_NAME);
+        return ODMType::getType(self::ODM_TYPE_NAME);
     }
 
     private function assertSerializer_serialize_wasCalledOnceWithObjectAndFormat(object $object, string $format): void

@@ -1,5 +1,8 @@
 # Doctrine JSON ODM library
 
+[![Latest Stable Version](https://poser.pugx.org/goodwix/doctrine-json-odm/v/stable)](https://packagist.org/packages/goodwix/doctrine-json-odm)
+[![Total Downloads](https://poser.pugx.org/goodwix/doctrine-json-odm/downloads)](https://packagist.org/packages/goodwix/doctrine-json-odm)
+[![License](https://poser.pugx.org/goodwix/doctrine-json-odm/license)](https://packagist.org/packages/goodwix/doctrine-json-odm)
 [![Build Status](https://scrutinizer-ci.com/g/goodwix/doctrine-json-odm/badges/build.png?b=master)](https://scrutinizer-ci.com/g/goodwix/doctrine-json-odm/build-status/master)
 [![Code Coverage](https://scrutinizer-ci.com/g/goodwix/doctrine-json-odm/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/goodwix/doctrine-json-odm/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/goodwix/doctrine-json-odm/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/goodwix/doctrine-json-odm/?branch=master)
@@ -19,6 +22,10 @@ This is beta version of library. Main differences from Dunglas library:
 * PostgreSQL 9.4+ support
 * Symfony 4+ support (not tested with Symfony 2 and 3)
 * MySQL support not tested
+
+## Additional features
+
+* Automatic registering normalizers for use with Java-like collections from [ramsey/collection](https://github.com/ramsey/collection) library
 
 ## Install
 
@@ -115,3 +122,29 @@ $documentStorage = $entityManager->find(DocumentStorage::class, $id);
 $documentStorage->document->title = 'ODM document title';
 $documentStorage->document->description = 'ODM document description';
 ```
+
+### Manual usage with Doctrine and Symfony Serializer component
+
+To manually register Doctrine ODM types use [`ODMType::registerODMType()`](https://github.com/goodwix/doctrine-json-odm/blob/36860ddaddc10e9ea33b2986b17009db979a0026/src/Type/ODMType.php#L100) method.
+
+```php
+require_once __DIR__.'/../vendor/autoload.php';
+
+use Goodwix\DoctrineJsonOdm\Type\ODMType;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class Document { }
+
+ODMType::registerODMType(
+    Document::class,
+    new class implements SerializerInterface
+    {
+        public function serialize($data, $format, array $context = [])  { /* Implement serialize() method. */ }
+        public function deserialize($data, $type, $format, array $context = [])  { /* Implement deserialize() method. */ }
+    }
+);
+```
+
+### Examples with Symfony application
+
+You can see example of Symfony 4 application with using ODM library in this [directory](https://github.com/goodwix/doctrine-json-odm/tree/master/tests/Resources/Symfony).
