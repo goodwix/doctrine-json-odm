@@ -8,6 +8,8 @@
 
 namespace Goodwix\DoctrineJsonOdm\Bridge\Symfony\DependencyInjection;
 
+use Ramsey\Collection\CollectionInterface;
+use Ramsey\Collection\Map\TypedMapInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -31,9 +33,25 @@ class DoctrineJsonOdmExtension extends Extension implements PrependExtensionInte
 
     public function load(array $configs, ContainerBuilder $container): void
     {
+        $this->loadServices($container);
+        $this->prepareConfiguration($configs, $container);
+    }
+
+    private function loadServices(ContainerBuilder $container): void
+    {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
+        if (
+            interface_exists(CollectionInterface::class)
+            && interface_exists(TypedMapInterface::class)
+        ) {
+            $loader->load('ramsey_collection_normalizers.xml');
+        }
+    }
+
+    private function prepareConfiguration(array $configs, ContainerBuilder $container): void
+    {
         $configuration          = new Configuration();
         $processedConfiguration = $this->processConfiguration($configuration, $configs);
 
