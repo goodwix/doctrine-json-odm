@@ -9,6 +9,7 @@
 namespace Goodwix\DoctrineJsonOdm\Serialization\RamseyCollection;
 
 use Ramsey\Collection\CollectionInterface;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -32,14 +33,26 @@ class CollectionNormalizer implements DenormalizerInterface, DenormalizerAwareIn
 
     public function denormalize($data, $class, $format = null, array $context = []): CollectionInterface
     {
+        if (!is_array($data)) {
+            throw new UnexpectedValueException(
+                sprintf('Expected value of type "array", value of type "%s" is given.', gettype($data))
+            );
+        }
+
         /** @var CollectionInterface $collection */
         $collection = new $class();
 
         $itemType = $collection->getType();
 
-        foreach ($data as $item) {
-            $item = $this->denormalizer->denormalize($item, $itemType, $format, $context);
-            $collection->add($item);
+        if (class_exists($itemType)) {
+            foreach ($data as $item) {
+                $item = $this->denormalizer->denormalize($item, $itemType, $format, $context);
+                $collection->add($item);
+            }
+        } else {
+            foreach ($data as $item) {
+                $collection->add($item);
+            }
         }
 
         return $collection;

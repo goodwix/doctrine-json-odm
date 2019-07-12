@@ -11,7 +11,9 @@ namespace Goodwix\DoctrineJsonOdm\Unit\Serialization\RamseyCollection;
 use Goodwix\DoctrineJsonOdm\Serialization\RamseyCollection\CollectionNormalizer;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntity;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntityCollection;
+use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyPrimitiveCollection;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class CollectionNormalizerTest extends TestCase
@@ -72,6 +74,34 @@ class CollectionNormalizerTest extends TestCase
         $this->assertDenormalizer_denormalize_wasCalledOnceWithDataAndType($data[0], DummyEntity::class);
     }
 
+    /** @test */
+    public function denormalize_arrayOfPrimitive_primitiveCollectionReturned(): void
+    {
+        $normalizer = $this->createCollectionNormalizer();
+        $data       = [
+            'value1',
+            'value2',
+            'value3',
+        ];
+
+        $collection = $normalizer->denormalize($data, DummyPrimitiveCollection::class, 'json');
+
+        $this->assertCount(3, $collection);
+        $this->assertSame($data, $collection->toArray());
+        $this->assertDenormalizer_denormalize_wasNeverCalled();
+    }
+
+    /** @test */
+    public function denormalize_string_exceptionThrown(): void
+    {
+        $normalizer = $this->createCollectionNormalizer();
+
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('Expected value of type "array", value of type "string" is given.');
+
+        $normalizer->denormalize('', DummyPrimitiveCollection::class, 'json');
+    }
+
     private function createCollectionNormalizer(): CollectionNormalizer
     {
         $normalizer = new CollectionNormalizer();
@@ -91,5 +121,11 @@ class CollectionNormalizerTest extends TestCase
     {
         \Phake::verify($this->denormalizer)
             ->denormalize($data, $type, 'json', []);
+    }
+
+    private function assertDenormalizer_denormalize_wasNeverCalled(): void
+    {
+        \Phake::verify($this->denormalizer, \Phake::never())
+            ->denormalize(\Phake::anyParameters());
     }
 }
