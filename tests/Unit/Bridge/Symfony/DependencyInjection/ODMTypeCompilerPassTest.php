@@ -19,11 +19,11 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class ODMTypeCompilerPassTest extends TestCase
 {
-    private const ODM_PATHS           = 'goodwix.doctrine_json_odm.odm_paths';
+    private const ODM_PATHS                  = 'goodwix.doctrine_json_odm.odm_paths';
     private const ODM_CLASSES_PATHS_VALUE    = [__DIR__.'/../../../../Resources/ODM'];
     private const ODM_INTERFACES_PATHS_VALUE = [__DIR__.'/../../../../Resources/ODMInterface'];
-    private const ODM_AUTO_REGISTRAR  = 'goodwix.doctrine_json_odm.odm_auto_registrar';
-    private const ANNOTATION_READER   = 'annotation_reader';
+    private const ODM_AUTO_REGISTRAR         = 'goodwix.doctrine_json_odm.odm_auto_registrar';
+    private const ANNOTATION_READER          = 'annotation_reader';
 
     /** @var ContainerBuilder */
     private $container;
