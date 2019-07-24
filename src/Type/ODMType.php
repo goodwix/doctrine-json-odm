@@ -99,8 +99,8 @@ class ODMType extends JsonType
 
     public static function registerODMType(string $entityClass, SerializerInterface $serializer): void
     {
-        if (!class_exists($entityClass)) {
-            throw new \DomainException(sprintf('Class "%s" does not exist.', $entityClass));
+        if (!class_exists($entityClass) && !interface_exists($entityClass)) {
+            throw new \DomainException(sprintf('Class or interface "%s" does not exist.', $entityClass));
         }
 
         self::addType($entityClass, static::class);
