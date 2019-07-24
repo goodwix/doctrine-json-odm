@@ -10,6 +10,7 @@ namespace Goodwix\DoctrineJsonOdm\Tests\Unit\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\ODM\DummyODM;
+use Goodwix\DoctrineJsonOdm\Tests\Resources\ODMInterface\DummyODMInterface;
 use Goodwix\DoctrineJsonOdm\Type\ODMType;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -179,10 +180,22 @@ class ODMTypeTest extends TestCase
     }
 
     /** @test */
+    public function registerODMType_entityInterfaceAndSerializer_doctrineTypeRegisteredWithEntityClassAndSerializer(): void
+    {
+        ODMType::registerODMType(DummyODMInterface::class, $this->serializer);
+        /** @var ODMType $type */
+        $type = ODMType::getType(DummyODMInterface::class);
+
+        $this->assertTrue(ODMType::hasType(DummyODMInterface::class));
+        $this->assertSame(DummyODMInterface::class, $type->getEntityClass());
+        $this->assertSame($this->serializer, $type->getSerializer());
+    }
+
+    /** @test */
     public function registerODMType_entityClassIsNotAClass_exceptionThrown(): void
     {
         $this->expectException(\DomainException::class);
-        $this->expectExceptionMessage('Class "not_a_class" does not exist.');
+        $this->expectExceptionMessage('Class or interface "not_a_class" does not exist.');
 
         ODMType::registerODMType('not_a_class', $this->serializer);
     }

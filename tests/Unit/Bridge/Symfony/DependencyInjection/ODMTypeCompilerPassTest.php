@@ -12,16 +12,18 @@ use Doctrine\Common\Annotations\Reader;
 use Goodwix\DoctrineJsonOdm\Annotation\ODM;
 use Goodwix\DoctrineJsonOdm\Bridge\Symfony\DependencyInjection\ODMTypeCompilerPass;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\ODM\DummyODM;
+use Goodwix\DoctrineJsonOdm\Tests\Resources\ODMInterface\DummyODMInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 class ODMTypeCompilerPassTest extends TestCase
 {
-    private const ODM_PATHS           = 'goodwix.doctrine_json_odm.odm_paths';
-    private const ODM_PATHS_VALUE     = [__DIR__.'/../../../../Resources/ODM'];
-    private const ODM_AUTO_REGISTRAR  = 'goodwix.doctrine_json_odm.odm_auto_registrar';
-    private const ANNOTATION_READER   = 'annotation_reader';
+    private const ODM_PATHS                  = 'goodwix.doctrine_json_odm.odm_paths';
+    private const ODM_CLASSES_PATHS_VALUE    = [__DIR__.'/../../../../Resources/ODM'];
+    private const ODM_INTERFACES_PATHS_VALUE = [__DIR__.'/../../../../Resources/ODMInterface'];
+    private const ODM_AUTO_REGISTRAR         = 'goodwix.doctrine_json_odm.odm_auto_registrar';
+    private const ANNOTATION_READER          = 'annotation_reader';
 
     /** @var ContainerBuilder */
     private $container;
@@ -41,7 +43,7 @@ class ODMTypeCompilerPassTest extends TestCase
         $pass = new ODMTypeCompilerPass();
         $this->givenContainer_has_returnsTrue();
         $this->givenContainer_hasParameter_returnsTrue();
-        $this->givenContainer_getParameter_returnsValue(self::ODM_PATHS, self::ODM_PATHS_VALUE);
+        $this->givenContainer_getParameter_returnsValue(self::ODM_PATHS, self::ODM_CLASSES_PATHS_VALUE);
         $definition = $this->givenContainer_getDefinition_returnsDefinition();
         $this->givenContainer_get_returnsAnnotationReader(self::ANNOTATION_READER);
         $this->givenReader_getClassAnnotation_returns(new ODM());
@@ -57,12 +59,33 @@ class ODMTypeCompilerPassTest extends TestCase
     }
 
     /** @test */
+    public function process_containerHasValidODMInterfaces_ODMInterfacesSetToODMAutoRegistrar(): void
+    {
+        $pass = new ODMTypeCompilerPass();
+        $this->givenContainer_has_returnsTrue();
+        $this->givenContainer_hasParameter_returnsTrue();
+        $this->givenContainer_getParameter_returnsValue(self::ODM_PATHS, self::ODM_INTERFACES_PATHS_VALUE);
+        $definition = $this->givenContainer_getDefinition_returnsDefinition();
+        $this->givenContainer_get_returnsAnnotationReader(self::ANNOTATION_READER);
+        $this->givenReader_getClassAnnotation_returns(new ODM());
+
+        $pass->process($this->container);
+
+        $this->assertContainer_has_wasCalledOnceWithServiceId(self::ODM_AUTO_REGISTRAR);
+        $this->assertContainer_hasParameter_wasCalledOnceWithParameterName(self::ODM_PATHS);
+        $this->assertContainer_getDefinition_wasCalledOnceWithServiceId(self::ODM_AUTO_REGISTRAR);
+        $this->assertContainer_get_wasCalledOnceWithServiceId(self::ANNOTATION_READER);
+        $this->assertReader_getClassAnnotation_wasCalledOnceWithReflectionClassAndAnnotationName(DummyODMInterface::class, ODM::class);
+        $this->assertDefinition_replaceArgument_wasCalledOnceWithIndexAndValue($definition, 1, [DummyODMInterface::class]);
+    }
+
+    /** @test */
     public function process_containerHasNoODMClasses_ODMClassesNotSetToODMAutoRegistrar(): void
     {
         $pass = new ODMTypeCompilerPass();
         $this->givenContainer_has_returnsTrue();
         $this->givenContainer_hasParameter_returnsTrue();
-        $this->givenContainer_getParameter_returnsValue(self::ODM_PATHS, self::ODM_PATHS_VALUE);
+        $this->givenContainer_getParameter_returnsValue(self::ODM_PATHS, self::ODM_CLASSES_PATHS_VALUE);
         $definition = $this->givenContainer_getDefinition_returnsDefinition();
         $this->givenContainer_get_returnsAnnotationReader(self::ANNOTATION_READER);
         $this->givenReader_getClassAnnotation_returns(null);
