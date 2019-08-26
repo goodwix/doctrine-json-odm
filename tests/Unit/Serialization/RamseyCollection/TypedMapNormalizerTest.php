@@ -11,6 +11,7 @@ namespace Goodwix\DoctrineJsonOdm\Unit\Serialization\RamseyCollection;
 use Goodwix\DoctrineJsonOdm\Serialization\RamseyCollection\TypedMapNormalizer;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntity;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntityMap;
+use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyPrimitiveMap;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
@@ -72,6 +73,23 @@ class TypedMapNormalizerTest extends TestCase
         $this->assertDenormalizer_denormalize_wasCalledOnceWithDataAndType($data['key'], DummyEntity::class);
     }
 
+    /** @test */
+    public function denormalize_arrayOfPrimitive_primitiveCollectionReturned(): void
+    {
+        $normalizer = $this->createMapNormalizer();
+        $data       = [
+            'key1' => 'value1',
+            'key2' => 'value2',
+            'key3' => 'value3',
+        ];
+
+        $collection = $normalizer->denormalize($data, DummyPrimitiveMap::class, 'json');
+
+        $this->assertCount(3, $collection);
+        $this->assertSame($data, $collection->toArray());
+        $this->assertDenormalizer_denormalize_wasNeverCalled();
+    }
+
     private function givenDenormalizer_denormalize_returnItem($item): void
     {
         \Phake::when($this->denormalizer)
@@ -91,5 +109,11 @@ class TypedMapNormalizerTest extends TestCase
         $normalizer->setDenormalizer($this->denormalizer);
 
         return $normalizer;
+    }
+
+    private function assertDenormalizer_denormalize_wasNeverCalled(): void
+    {
+        \Phake::verify($this->denormalizer, \Phake::never())
+            ->denormalize(\Phake::anyParameters());
     }
 }
