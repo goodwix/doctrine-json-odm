@@ -38,7 +38,7 @@ class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInte
 
         $itemType = $map->getValueType();
 
-        if (class_exists($itemType)) {
+        if (class_exists($itemType) || interface_exists($itemType)) {
             foreach ($data as $key => $item) {
                 $item = $this->denormalizer->denormalize($item, $itemType, $format, $context);
                 $map->put($key, $item);

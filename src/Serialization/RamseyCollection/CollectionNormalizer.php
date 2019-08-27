@@ -44,7 +44,7 @@ class CollectionNormalizer implements DenormalizerInterface, DenormalizerAwareIn
 
         $itemType = $collection->getType();
 
-        if (class_exists($itemType)) {
+        if (class_exists($itemType) || interface_exists($itemType)) {
             foreach ($data as $item) {
                 $item = $this->denormalizer->denormalize($item, $itemType, $format, $context);
                 $collection->add($item);

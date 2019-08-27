@@ -10,6 +10,8 @@ namespace Goodwix\DoctrineJsonOdm\Unit\Serialization\RamseyCollection;
 
 use Goodwix\DoctrineJsonOdm\Serialization\RamseyCollection\TypedMapNormalizer;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntity;
+use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntityInterface;
+use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntityInterfaceMap;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntityMap;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyPrimitiveMap;
 use PHPUnit\Framework\TestCase;
@@ -56,7 +58,7 @@ class TypedMapNormalizerTest extends TestCase
     }
 
     /** @test */
-    public function denormalize_arrayOfCollectionEntity_entityCollectionReturned(): void
+    public function denormalize_arrayOfClassMap_classMapReturned(): void
     {
         $normalizer = $this->createMapNormalizer();
         $data       = [
@@ -71,6 +73,24 @@ class TypedMapNormalizerTest extends TestCase
         $this->assertCount(1, $map);
         $this->assertInstanceOf(DummyEntity::class, $map->get('key'));
         $this->assertDenormalizer_denormalize_wasCalledOnceWithDataAndType($data['key'], DummyEntity::class);
+    }
+
+    /** @test */
+    public function denormalize_arrayOfInterfaceMap_interfaceMapReturned(): void
+    {
+        $normalizer = $this->createMapNormalizer();
+        $data       = [
+            'key' => [
+                'id',
+            ],
+        ];
+        $this->givenDenormalizer_denormalize_returnItem(\Phake::mock(DummyEntityInterface::class));
+
+        $map = $normalizer->denormalize($data, DummyEntityInterfaceMap::class, 'json');
+
+        $this->assertCount(1, $map);
+        $this->assertInstanceOf(DummyEntityInterface::class, $map->get('key'));
+        $this->assertDenormalizer_denormalize_wasCalledOnceWithDataAndType($data['key'], DummyEntityInterface::class);
     }
 
     /** @test */
