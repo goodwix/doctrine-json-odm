@@ -11,6 +11,8 @@ namespace Goodwix\DoctrineJsonOdm\Unit\Serialization\RamseyCollection;
 use Goodwix\DoctrineJsonOdm\Serialization\RamseyCollection\CollectionNormalizer;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntity;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntityCollection;
+use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntityInterface;
+use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntityInterfaceCollection;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyPrimitiveCollection;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
@@ -57,7 +59,7 @@ class CollectionNormalizerTest extends TestCase
     }
 
     /** @test */
-    public function denormalize_arrayOfCollectionEntity_entityCollectionReturned(): void
+    public function denormalize_arrayOfClassCollection_classCollectionReturned(): void
     {
         $normalizer = $this->createCollectionNormalizer();
         $data       = [
@@ -72,6 +74,24 @@ class CollectionNormalizerTest extends TestCase
         $this->assertCount(1, $collection);
         $this->assertInstanceOf(DummyEntity::class, $collection->first());
         $this->assertDenormalizer_denormalize_wasCalledOnceWithDataAndType($data[0], DummyEntity::class);
+    }
+
+    /** @test */
+    public function denormalize_arrayOfInterfaceCollection_interfaceCollectionReturned(): void
+    {
+        $normalizer = $this->createCollectionNormalizer();
+        $data       = [
+            [
+                'id' => 'id',
+            ],
+        ];
+        $this->givenDenormalizer_denormalize_returnItem(\Phake::mock(DummyEntityInterface::class));
+
+        $collection = $normalizer->denormalize($data, DummyEntityInterfaceCollection::class, 'json');
+
+        $this->assertCount(1, $collection);
+        $this->assertInstanceOf(DummyEntityInterface::class, $collection->first());
+        $this->assertDenormalizer_denormalize_wasCalledOnceWithDataAndType($data[0], DummyEntityInterface::class);
     }
 
     /** @test */
