@@ -6,9 +6,7 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Goodwix\DoctrineJsonOdm\Tests\Resources;
-
 
 use Ramsey\Collection\Map\AbstractTypedMap;
 
@@ -23,5 +21,4 @@ class DummyEntityInterfaceMap extends AbstractTypedMap
     {
         return DummyEntityInterface::class;
     }
-
 }

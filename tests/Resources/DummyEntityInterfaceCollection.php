@@ -6,9 +6,7 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Goodwix\DoctrineJsonOdm\Tests\Resources;
-
 
 use Ramsey\Collection\AbstractCollection;
 
@@ -18,5 +16,4 @@ class DummyEntityInterfaceCollection extends AbstractCollection
     {
         return DummyEntityInterface::class;
     }
-
 }

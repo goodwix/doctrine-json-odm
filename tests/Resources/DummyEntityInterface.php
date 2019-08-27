@@ -6,11 +6,8 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Goodwix\DoctrineJsonOdm\Tests\Resources;
-
 
 interface DummyEntityInterface
 {
-
 }
