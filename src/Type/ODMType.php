@@ -10,6 +10,8 @@ namespace Goodwix\DoctrineJsonOdm\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\JsonType;
+use Goodwix\DoctrineJsonOdm\Exception\JsonOdmException;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ODMType extends JsonType
@@ -75,6 +77,8 @@ class ODMType extends JsonType
 
     /**
      * {@inheritdoc}
+     *
+     * @throws JsonOdmException
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
@@ -82,11 +86,21 @@ class ODMType extends JsonType
             return null;
         }
 
-        return $this->getSerializer()->serialize($value, $this->format);
+        try {
+            $value = $this->getSerializer()->serialize($value, $this->format);
+        } catch (ExceptionInterface $exception) {
+            $message = sprintf('Serialization exception occurred for class "%s".', $this->getEntityClass());
+
+            throw new JsonOdmException($message, 0, $exception);
+        }
+
+        return $value;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws JsonOdmException
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?object
     {
@@ -94,7 +108,15 @@ class ODMType extends JsonType
             return null;
         }
 
-        return $this->getSerializer()->deserialize($value, $this->getEntityClass(), $this->format);
+        try {
+            $value = $this->getSerializer()->deserialize($value, $this->getEntityClass(), $this->format);
+        } catch (ExceptionInterface $exception) {
+            $message = sprintf('Deserialization exception occurred for class "%s".', $this->getEntityClass());
+
+            throw new JsonOdmException($message, 0, $exception);
+        }
+
+        return $value;
     }
 
     public static function registerODMType(string $entityClass, SerializerInterface $serializer): void

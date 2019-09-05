@@ -9,10 +9,12 @@
 namespace Goodwix\DoctrineJsonOdm\Tests\Unit\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Goodwix\DoctrineJsonOdm\Exception\JsonOdmException;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\ODM\DummyODM;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\ODMInterface\DummyODMInterface;
 use Goodwix\DoctrineJsonOdm\Type\ODMType;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ODMTypeTest extends TestCase
@@ -126,6 +128,28 @@ class ODMTypeTest extends TestCase
     }
 
     /** @test */
+    public function convertToDatabaseValue_serializerException_exceptionConvertedToJsonOdmException(): void
+    {
+        $type = $this->createODMType();
+        $type->setEntityClass(self::ENTITY_CLASS);
+        $type->setSerializer($this->serializer);
+        $object              = new DummyODM();
+        $serializerException = $this->givenSerializerException();
+        $this->givenSerialize_serialize_throwsException($serializerException);
+        $exception = null;
+
+        try {
+            $type->convertToDatabaseValue($object, $this->platform);
+        } catch (\Throwable $exception) {
+        }
+
+        $this->assertSerializer_serialize_wasCalledOnceWithObjectAndFormat($object, self::JSON_FORMAT);
+        $this->assertInstanceOf(JsonOdmException::class, $exception);
+        $this->assertSame('Serialization exception occurred for class "entity_class".', $exception->getMessage());
+        $this->assertSame($serializerException, $exception->getPrevious());
+    }
+
+    /** @test */
     public function convertToDatabaseValue_null_nullReturned(): void
     {
         $type = $this->createODMType();
@@ -152,6 +176,31 @@ class ODMTypeTest extends TestCase
             self::JSON_FORMAT
         );
         $this->assertSame($object, $value);
+    }
+
+    /** @test */
+    public function convertToPHPValue_serializerException_exceptionConvertedToJsonOdmException(): void
+    {
+        $type = $this->createODMType();
+        $type->setSerializer($this->serializer);
+        $type->setEntityClass(self::ENTITY_CLASS);
+        $serializerException = $this->givenSerializerException();
+        $this->givenSerializer_deserialize_throwsException($serializerException);
+        $exception = null;
+
+        try {
+            $type->convertToPHPValue(self::SERIALIZED_VALUE, $this->platform);
+        } catch (\Throwable $exception) {
+        }
+
+        $this->assertSerializer_deserialize_wasCalledOnceWithValueAndTypeAndFormat(
+            self::SERIALIZED_VALUE,
+            self::ENTITY_CLASS,
+            self::JSON_FORMAT
+        );
+        $this->assertInstanceOf(JsonOdmException::class, $exception);
+        $this->assertSame('Deserialization exception occurred for class "entity_class".', $exception->getMessage());
+        $this->assertSame($serializerException, $exception->getPrevious());
     }
 
     /**
@@ -232,6 +281,13 @@ class ODMTypeTest extends TestCase
             ->thenReturn($value);
     }
 
+    private function givenSerialize_serialize_throwsException(\Throwable $exception): void
+    {
+        \Phake::when($this->serializer)
+            ->serialize(\Phake::anyParameters())
+            ->thenThrow($exception);
+    }
+
     private function assertSerializer_deserialize_wasCalledOnceWithValueAndTypeAndFormat(
         string $value,
         string $type,
@@ -250,5 +306,18 @@ class ODMTypeTest extends TestCase
             ->thenReturn($object);
 
         return $object;
+    }
+
+    private function givenSerializer_deserialize_throwsException(\Throwable $exception): void
+    {
+        \Phake::when($this->serializer)
+            ->deserialize(\Phake::anyParameters())
+            ->thenThrow($exception);
+    }
+
+    private function givenSerializerException(): ExceptionInterface
+    {
+        return new class() extends \Exception implements ExceptionInterface {
+        };
     }
 }
