@@ -55,7 +55,7 @@ class ODMTypeCompilerPassTest extends TestCase
         $this->assertContainer_getDefinition_wasCalledOnceWithServiceId(self::ODM_AUTO_REGISTRAR);
         $this->assertContainer_get_wasCalledOnceWithServiceId(self::ANNOTATION_READER);
         $this->assertReader_getClassAnnotation_wasCalledOnceWithReflectionClassAndAnnotationName(DummyODM::class, ODM::class);
-        $this->assertDefinition_replaceArgument_wasCalledOnceWithIndexAndValue($definition, 1, [DummyODM::class]);
+        $this->assertDefinition_replaceArgument_wasCalledOnceWithIndexAndValue($definition, 2, [DummyODM::class]);
     }
 
     /** @test */
@@ -76,7 +76,7 @@ class ODMTypeCompilerPassTest extends TestCase
         $this->assertContainer_getDefinition_wasCalledOnceWithServiceId(self::ODM_AUTO_REGISTRAR);
         $this->assertContainer_get_wasCalledOnceWithServiceId(self::ANNOTATION_READER);
         $this->assertReader_getClassAnnotation_wasCalledOnceWithReflectionClassAndAnnotationName(DummyODMInterface::class, ODM::class);
-        $this->assertDefinition_replaceArgument_wasCalledOnceWithIndexAndValue($definition, 1, [DummyODMInterface::class]);
+        $this->assertDefinition_replaceArgument_wasCalledOnceWithIndexAndValue($definition, 2, [DummyODMInterface::class]);
     }
 
     /** @test */
@@ -97,7 +97,7 @@ class ODMTypeCompilerPassTest extends TestCase
         $this->assertContainer_getDefinition_wasCalledOnceWithServiceId(self::ODM_AUTO_REGISTRAR);
         $this->assertContainer_get_wasCalledOnceWithServiceId(self::ANNOTATION_READER);
         $this->assertReader_getClassAnnotation_wasCalledOnceWithReflectionClassAndAnnotationName(DummyODM::class, ODM::class);
-        $this->assertDefinition_replaceArgument_wasCalledOnceWithIndexAndValue($definition, 1, []);
+        $this->assertDefinition_replaceArgument_wasCalledOnceWithIndexAndValue($definition, 2, []);
     }
 
     private function assertContainer_get_wasCalledOnceWithServiceId($serviceId): void

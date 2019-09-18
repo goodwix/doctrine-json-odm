@@ -30,7 +30,7 @@ class ODMTypeCompilerPass implements CompilerPassInterface
             $entityClassList = $this->collectEntityClassListFromPaths($paths);
 
             $definition = $container->getDefinition(self::ODM_AUTO_REGISTRAR);
-            $definition->replaceArgument(1, $entityClassList);
+            $definition->replaceArgument(2, $entityClassList);
         }
     }
 

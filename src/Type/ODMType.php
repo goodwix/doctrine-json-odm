@@ -16,6 +16,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class ODMType extends JsonType
 {
+    /** @var array */
+    public $deserializationContext = [];
     /** @var SerializerInterface */
     private $serializer;
 
@@ -24,6 +26,9 @@ class ODMType extends JsonType
 
     /** @var string */
     private $entityClass;
+
+    /** @var array */
+    private $serializationContext = [];
 
     public function getSerializer(): SerializerInterface
     {
@@ -70,6 +75,26 @@ class ODMType extends JsonType
         $this->entityClass = $entityClass;
     }
 
+    public function getSerializationContext(): array
+    {
+        return $this->serializationContext;
+    }
+
+    public function setSerializationContext(array $serializationContext): void
+    {
+        $this->serializationContext = $serializationContext;
+    }
+
+    public function getDeserializationContext(): array
+    {
+        return $this->deserializationContext;
+    }
+
+    public function setDeserializationContext(array $deserializationContext): void
+    {
+        $this->deserializationContext = $deserializationContext;
+    }
+
     public function getName(): string
     {
         return $this->getEntityClass();
@@ -87,7 +112,8 @@ class ODMType extends JsonType
         }
 
         try {
-            $value = $this->getSerializer()->serialize($value, $this->format);
+            $context = $this->getSerializationContext();
+            $value   = $this->getSerializer()->serialize($value, $this->format, $context);
         } catch (ExceptionInterface $exception) {
             $message = sprintf('Serialization exception occurred for class "%s".', $this->getEntityClass());
 
@@ -109,7 +135,8 @@ class ODMType extends JsonType
         }
 
         try {
-            $value = $this->getSerializer()->deserialize($value, $this->getEntityClass(), $this->format);
+            $context = $this->getDeserializationContext();
+            $value   = $this->getSerializer()->deserialize($value, $this->getEntityClass(), $this->format, $context);
         } catch (ExceptionInterface $exception) {
             $message = sprintf('Deserialization exception occurred for class "%s".', $this->getEntityClass());
 

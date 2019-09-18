@@ -3,6 +3,7 @@
     <services>
         <service id="goodwix.doctrine_json_odm.odm_auto_registrar" class="Goodwix\DoctrineJsonOdm\Service\ODMAutoRegistrar" public="true">
             <argument type="service" id="serializer"/>
+            <argument type="service" id="annotation_reader"/>
             <argument type="collection"/>
         </service>
     </services>

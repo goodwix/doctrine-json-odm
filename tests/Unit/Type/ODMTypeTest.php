@@ -24,6 +24,7 @@ class ODMTypeTest extends TestCase
     private const CUSTOM_FORMAT    = 'custom_format';
     private const SERIALIZED_VALUE = 'serialized_value';
     private const ENTITY_CLASS     = 'entity_class';
+    private const CONTEXT          = ['context'];
 
     /** @var SerializerInterface */
     private $serializer;
@@ -103,6 +104,28 @@ class ODMTypeTest extends TestCase
     }
 
     /** @test */
+    public function getSerializationContext_context_contextReturned(): void
+    {
+        $type = $this->createODMType();
+        $type->setSerializationContext(self::CONTEXT);
+
+        $context = $type->getSerializationContext();
+
+        $this->assertSame(self::CONTEXT, $context);
+    }
+
+    /** @test */
+    public function getDeserializationContext_context_contextReturned(): void
+    {
+        $type = $this->createODMType();
+        $type->setDeserializationContext(self::CONTEXT);
+
+        $context = $type->getDeserializationContext();
+
+        $this->assertSame(self::CONTEXT, $context);
+    }
+
+    /** @test */
     public function getName_entityClassIsSet_entityClassReturnedAsName(): void
     {
         $type = $this->createODMType();
@@ -118,12 +141,17 @@ class ODMTypeTest extends TestCase
     {
         $type = $this->createODMType();
         $type->setSerializer($this->serializer);
+        $type->setSerializationContext(self::CONTEXT);
         $object = new DummyODM();
         $this->givenSerialize_serialize_returnsValue(self::SERIALIZED_VALUE);
 
         $value = $type->convertToDatabaseValue($object, $this->platform);
 
-        $this->assertSerializer_serialize_wasCalledOnceWithObjectAndFormat($object, self::JSON_FORMAT);
+        $this->assertSerializer_serialize_wasCalledOnceWithObjectAndFormatAndContext(
+            $object,
+            self::JSON_FORMAT,
+            self::CONTEXT
+        );
         $this->assertSame(self::SERIALIZED_VALUE, $value);
     }
 
@@ -143,7 +171,7 @@ class ODMTypeTest extends TestCase
         } catch (\Throwable $exception) {
         }
 
-        $this->assertSerializer_serialize_wasCalledOnceWithObjectAndFormat($object, self::JSON_FORMAT);
+        $this->assertSerializer_serialize_wasCalledOnceWithObjectAndFormatAndContext($object, self::JSON_FORMAT);
         $this->assertInstanceOf(JsonOdmException::class, $exception);
         $this->assertSame('Serialization exception occurred for class "entity_class".', $exception->getMessage());
         $this->assertSame($serializerException, $exception->getPrevious());
@@ -166,14 +194,16 @@ class ODMTypeTest extends TestCase
         $type = $this->createODMType();
         $type->setSerializer($this->serializer);
         $type->setEntityClass(self::ENTITY_CLASS);
+        $type->setDeserializationContext(self::CONTEXT);
         $object = $this->givenSerializer_deserialize_returnsObject();
 
         $value = $type->convertToPHPValue(self::SERIALIZED_VALUE, $this->platform);
 
-        $this->assertSerializer_deserialize_wasCalledOnceWithValueAndTypeAndFormat(
+        $this->assertSerializer_deserialize_wasCalledOnceWithValueAndTypeAndFormatAndContext(
             self::SERIALIZED_VALUE,
             self::ENTITY_CLASS,
-            self::JSON_FORMAT
+            self::JSON_FORMAT,
+            self::CONTEXT
         );
         $this->assertSame($object, $value);
     }
@@ -193,7 +223,7 @@ class ODMTypeTest extends TestCase
         } catch (\Throwable $exception) {
         }
 
-        $this->assertSerializer_deserialize_wasCalledOnceWithValueAndTypeAndFormat(
+        $this->assertSerializer_deserialize_wasCalledOnceWithValueAndTypeAndFormatAndContext(
             self::SERIALIZED_VALUE,
             self::ENTITY_CLASS,
             self::JSON_FORMAT
@@ -268,10 +298,13 @@ class ODMTypeTest extends TestCase
         return ODMType::getType(self::ODM_TYPE_NAME);
     }
 
-    private function assertSerializer_serialize_wasCalledOnceWithObjectAndFormat(object $object, string $format): void
-    {
+    private function assertSerializer_serialize_wasCalledOnceWithObjectAndFormatAndContext(
+        object $object,
+        string $format,
+        array $context = []
+    ): void {
         \Phake::verify($this->serializer)
-            ->serialize($object, $format);
+            ->serialize($object, $format, $context);
     }
 
     private function givenSerialize_serialize_returnsValue($value): void
@@ -288,13 +321,14 @@ class ODMTypeTest extends TestCase
             ->thenThrow($exception);
     }
 
-    private function assertSerializer_deserialize_wasCalledOnceWithValueAndTypeAndFormat(
+    private function assertSerializer_deserialize_wasCalledOnceWithValueAndTypeAndFormatAndContext(
         string $value,
         string $type,
-        string $format
+        string $format,
+        array $context = []
     ): void {
         \Phake::verify($this->serializer)
-            ->deserialize($value, $type, $format);
+            ->deserialize($value, $type, $format, $context);
     }
 
     private function givenSerializer_deserialize_returnsObject(): DummyODM
