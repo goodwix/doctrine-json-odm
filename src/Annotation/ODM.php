@@ -8,9 +8,17 @@
 
 namespace Goodwix\DoctrineJsonOdm\Annotation;
 
+use Doctrine\Common\Annotations\Annotation\Target;
+
 /**
  * @Annotation
+ * @Target("CLASS")
  */
 class ODM
 {
+    /** @var array */
+    public $serializationContext = [];
+
+    /** @var array */
+    public $deserializationContext = [];
 }
