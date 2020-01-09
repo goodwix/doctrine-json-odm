@@ -50,7 +50,7 @@ class CollectionNormalizer implements DenormalizerInterface, DenormalizerAwareIn
         return $collection;
     }
 
-    private function createAndFillCollection(array $data, string $class, string $format, array $context): CollectionInterface
+    private function createAndFillCollection(array $data, string $class, ?string $format, array $context): CollectionInterface
     {
         /** @var CollectionInterface $collection */
         $collection = new $class();
