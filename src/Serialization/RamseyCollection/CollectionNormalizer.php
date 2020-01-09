@@ -9,6 +9,8 @@
 namespace Goodwix\DoctrineJsonOdm\Serialization\RamseyCollection;
 
 use Ramsey\Collection\CollectionInterface;
+use Ramsey\Collection\Exception\InvalidArgumentException as RamseyInvalidArgumentException;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -39,6 +41,17 @@ class CollectionNormalizer implements DenormalizerInterface, DenormalizerAwareIn
             );
         }
 
+        try {
+            $collection = $this->createAndFillCollection($data, $class, $format, $context);
+        } catch (RamseyInvalidArgumentException $exception) {
+            throw new InvalidArgumentException($exception->getMessage(), $exception->getCode(), $exception);
+        }
+
+        return $collection;
+    }
+
+    private function createAndFillCollection(array $data, string $class, string $format, array $context): CollectionInterface
+    {
         /** @var CollectionInterface $collection */
         $collection = new $class();
 

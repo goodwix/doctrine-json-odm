@@ -15,6 +15,7 @@ use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntityInterface;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntityInterfaceCollection;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyPrimitiveCollection;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
@@ -120,6 +121,22 @@ class CollectionNormalizerTest extends TestCase
         $this->expectExceptionMessage('Expected value of type "array", value of type "string" is given.');
 
         $normalizer->denormalize('', DummyPrimitiveCollection::class, 'json');
+    }
+
+    /** @test */
+    public function denormalize_arrayOfClassCollectionAndInvalidItem_invalidArgumentException(): void
+    {
+        $normalizer = $this->createCollectionNormalizer();
+        $data       = [
+            [
+                'id' => 'id',
+            ],
+        ];
+        $this->givenDenormalizer_denormalize_returnItem(new \stdClass());
+
+        $this->expectException(InvalidArgumentException::class);
+
+        $normalizer->denormalize($data, DummyEntityCollection::class, 'json');
     }
 
     private function createCollectionNormalizer(): CollectionNormalizer
