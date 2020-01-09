@@ -15,6 +15,8 @@ use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntityInterfaceMap;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntityMap;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyPrimitiveMap;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class TypedMapNormalizerTest extends TestCase
@@ -108,6 +110,31 @@ class TypedMapNormalizerTest extends TestCase
         $this->assertCount(3, $collection);
         $this->assertSame($data, $collection->toArray());
         $this->assertDenormalizer_denormalize_wasNeverCalled();
+    }
+
+    /** @test */
+    public function denormalize_string_exceptionThrown(): void
+    {
+        $normalizer = $this->createMapNormalizer();
+
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('Expected value of type "array", value of type "string" is given.');
+
+        $normalizer->denormalize('', DummyPrimitiveMap::class, 'json');
+    }
+
+    /** @test */
+    public function denormalize_arrayOfClassCollectionAndInvalidItem_invalidArgumentException(): void
+    {
+        $normalizer = $this->createMapNormalizer();
+        $data       = [
+            'id' => 'id',
+        ];
+        $this->givenDenormalizer_denormalize_returnItem(new \stdClass());
+
+        $this->expectException(InvalidArgumentException::class);
+
+        $normalizer->denormalize($data, DummyEntityMap::class, 'json');
     }
 
     private function givenDenormalizer_denormalize_returnItem($item): void
