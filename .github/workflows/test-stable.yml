@@ -10,6 +10,16 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+
     steps:
       - uses: actions/checkout@v2
 
@@ -21,3 +31,8 @@ jobs:
 
       - name: Unit test
         run: ./vendor/bin/phpunit
+        env:
+          DATABASE_HOST: 'localhost'
+          DATABASE_DBNAME: 'postgres'
+          DATABASE_USER: 'postgres'
+          DATABASE_PASSWORD: 'postgres'
