@@ -55,7 +55,7 @@ class ODMTypeTest extends TestCase
         $type = $this->createODMType();
 
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/An instance of .* must be available. Call the "setSerializer" method./');
+        $this->expectExceptionMessageMatches('/An instance of .* must be available. Call the "setSerializer" method./');
 
         $type->getSerializer();
     }
