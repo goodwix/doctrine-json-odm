@@ -146,5 +146,5 @@ abstract class AbstractODMType extends JsonType
         return $value;
     }
 
-    public static abstract function registerODMType(string $entityClass, SerializerInterface $serializer): void;
+    abstract public static function registerODMType(string $entityClass, SerializerInterface $serializer): void;
 }
