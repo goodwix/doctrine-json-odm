@@ -14,7 +14,7 @@ use Goodwix\DoctrineJsonOdm\Exception\JsonOdmException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class ODMType extends AbstractODMType
+class ODMArrayType extends AbstractODMType
 {
     public static function registerODMType(string $entityClass, SerializerInterface $serializer): void
     {
@@ -22,11 +22,12 @@ class ODMType extends AbstractODMType
             throw new \DomainException(sprintf('Class or interface "%s" does not exist.', $entityClass));
         }
 
-        self::addType($entityClass, static::class);
+        $typeName = sprintf('%s[]', $entityClass);
+        self::addType($typeName, static::class);
 
         /** @var ODMType $type */
-        $type = self::getType($entityClass);
-        $type->setEntityClass($entityClass);
+        $type = self::getType($typeName);
+        $type->setEntityClass($typeName);
         $type->setSerializer($serializer);
     }
 }
