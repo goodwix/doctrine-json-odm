@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "ext-json": "*",
         "doctrine/orm": "^2.5",
         "symfony/property-access": "^4.3|^5.0",
@@ -22,11 +22,14 @@
         "doctrine/doctrine-bundle": "^2.0",
         "symfony/framework-bundle": "^5.0",
         "symfony/expression-language": "^5.0",
-        "symplify/easy-coding-standard": "^7.0",
+        "symplify/easy-coding-standard": "^8.0",
         "phake/phake": "^3.0",
-        "phpunit/phpunit": "^8.0",
+        "phpunit/phpunit": "^9.0",
         "roave/security-advisories": "dev-master",
-        "ramsey/collection": "^1.0"
+        "ramsey/collection": "^1.0",
+        "phpstan/phpstan": "^0.12.33",
+        "phpstan/phpstan-phpunit": "^0.12.12",
+        "phpstan/phpstan-symfony": "^0.12.6"
     },
     "autoload": {
         "psr-4": {
@@ -40,5 +43,16 @@
     },
     "suggest": {
         "ramsey/collection": "To use Java-like collection normalizers"
+    },
+    "scripts": {
+        "lint": [
+            "ecs check src",
+            "ecs check tests",
+            "phpstan analyze --no-progress --level 5 src",
+            "phpstan analyze --no-progress --level 1 tests"
+        ],
+        "fix": [
+            "ecs check --fix src tests"
+        ]
     }
 }

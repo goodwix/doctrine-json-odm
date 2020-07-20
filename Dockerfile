@@ -1,4 +1,4 @@
-FROM php:7.2-cli-alpine
+FROM php:7.3-cli-alpine
 
 ENV APP_ENV=prod \
     COMPOSER_HOME=/var/run/composer \
