@@ -148,3 +148,9 @@ ODMType::registerODMType(
 ### Examples with Symfony application
 
 You can see example of Symfony 4 application with using ODM library in this [directory](https://github.com/goodwix/doctrine-json-odm/tree/master/tests/Resources/Symfony).
+
+## Contribution
+
+You can run `composer lint` before pushing to repository to ensure that there are no code style errors.
+
+Please remember to add some tests if you change library code.

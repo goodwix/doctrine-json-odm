@@ -101,8 +101,6 @@ class ODMType extends JsonType
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws JsonOdmException
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
@@ -124,8 +122,6 @@ class ODMType extends JsonType
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws JsonOdmException
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?object
