@@ -11,19 +11,21 @@ namespace Goodwix\DoctrineJsonOdm\Serialization\RamseyCollection;
 use Ramsey\Collection\Exception\InvalidArgumentException as RamseyInvalidArgumentException;
 use Ramsey\Collection\Map\MapInterface;
 use Ramsey\Collection\Map\TypedMapInterface;
-use Symfony\Component\Serializer\Encoder\NormalizationAwareInterface;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInterface, NormalizerInterface, NormalizationAwareInterface
+class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInterface, NormalizerInterface, NormalizerAwareInterface
 {
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+
+    private const TYPED_MAP_NORMALIZER_ALREADY_CALLED = 'TYPED_MAP_NORMALIZER_ALREADY_CALLED';
 
     public function supportsDenormalization($data, $type, $format = null): bool
     {
@@ -55,17 +57,23 @@ class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInte
         return $map;
     }
 
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, $format = null, array $context = [])
     {
+        if (isset($context[self::TYPED_MAP_NORMALIZER_ALREADY_CALLED])) {
+            return false;
+        }
+
         return $data instanceof TypedMapInterface;
     }
 
     public function normalize($object, $format = null, array $context = [])
     {
+        $context[self::TYPED_MAP_NORMALIZER_ALREADY_CALLED] = true;
+
         $normalizedMap = null;
 
         if (count($object) > 0) {
-            $normalizedMap = $object->toArray();
+            $normalizedMap = $this->normalizer->normalize($object, $format, $context);
         } else {
             $normalizedMap = new \ArrayObject();
         }

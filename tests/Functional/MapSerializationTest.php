@@ -24,7 +24,7 @@ class MapSerializationTest extends SerializerTestCase
     public function mapAndExpectedJsonProvider(): \Iterator
     {
         yield 'primitive map' => [new DummyPrimitiveMap(['key' => 'value']), '{"key":"value"}'];
-        yield 'entity map' => [new DummyEntityMap(['key' => new DummyEntity()]), '{"key":{}}'];
+        yield 'entity map' => [new DummyEntityMap(['key' => new DummyEntity()]), '{"key":{"field":null}}'];
         yield 'empty map' => [new DummyPrimitiveMap(), '{}'];
     }
 }
