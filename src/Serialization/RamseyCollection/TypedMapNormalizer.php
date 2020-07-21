@@ -11,15 +11,24 @@ namespace Goodwix\DoctrineJsonOdm\Serialization\RamseyCollection;
 use Ramsey\Collection\Exception\InvalidArgumentException as RamseyInvalidArgumentException;
 use Ramsey\Collection\Map\MapInterface;
 use Ramsey\Collection\Map\TypedMapInterface;
+use Symfony\Component\Serializer\Encoder\NormalizationAwareInterface;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInterface
+class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInterface, NormalizerInterface, NormalizationAwareInterface
 {
     use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
+    protected const SUPPORTED_NORMALIZATION_FORMATS = [
+        'jsonld',
+        'json',
+    ];
 
     public function supportsDenormalization($data, $type, $format = null): bool
     {
@@ -49,6 +58,24 @@ class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInte
         }
 
         return $map;
+    }
+
+    public function supportsNormalization($data, ?string $format = null)
+    {
+        return $data instanceof TypedMapInterface && in_array($format, self::SUPPORTED_NORMALIZATION_FORMATS, true);
+    }
+
+    public function normalize($object, ?string $format = null, array $context = [])
+    {
+        $normalizedMap = null;
+
+        if (count($object) > 0) {
+            $normalizedMap = $object->toArray();
+        } else {
+            $normalizedMap = new \ArrayObject();
+        }
+
+        return $normalizedMap;
     }
 
     private function createAndFillMap(array $data, string $class, ?string $format, array $context): TypedMapInterface

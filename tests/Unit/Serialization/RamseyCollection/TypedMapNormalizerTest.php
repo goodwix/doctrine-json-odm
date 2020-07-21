@@ -21,6 +21,9 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class TypedMapNormalizerTest extends TestCase
 {
+    protected const JSON_LD_FORMAT = 'jsonld';
+    protected const JSON_FORMAT    = 'json';
+
     /** @var DenormalizerInterface */
     private $denormalizer;
 
@@ -70,7 +73,7 @@ class TypedMapNormalizerTest extends TestCase
         ];
         $this->givenDenormalizer_denormalize_returnItem(new DummyEntity());
 
-        $map = $normalizer->denormalize($data, DummyEntityMap::class, 'json');
+        $map = $normalizer->denormalize($data, DummyEntityMap::class, self::JSON_FORMAT);
 
         $this->assertCount(1, $map);
         $this->assertInstanceOf(DummyEntity::class, $map->get('key'));
@@ -88,7 +91,7 @@ class TypedMapNormalizerTest extends TestCase
         ];
         $this->givenDenormalizer_denormalize_returnItem(\Phake::mock(DummyEntityInterface::class));
 
-        $map = $normalizer->denormalize($data, DummyEntityInterfaceMap::class, 'json');
+        $map = $normalizer->denormalize($data, DummyEntityInterfaceMap::class, self::JSON_FORMAT);
 
         $this->assertCount(1, $map);
         $this->assertInstanceOf(DummyEntityInterface::class, $map->get('key'));
@@ -105,7 +108,7 @@ class TypedMapNormalizerTest extends TestCase
             'key3' => 'value3',
         ];
 
-        $collection = $normalizer->denormalize($data, DummyPrimitiveMap::class, 'json');
+        $collection = $normalizer->denormalize($data, DummyPrimitiveMap::class, self::JSON_FORMAT);
 
         $this->assertCount(3, $collection);
         $this->assertSame($data, $collection->toArray());
@@ -120,7 +123,7 @@ class TypedMapNormalizerTest extends TestCase
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage('Expected value of type "array", value of type "string" is given.');
 
-        $normalizer->denormalize('', DummyPrimitiveMap::class, 'json');
+        $normalizer->denormalize('', DummyPrimitiveMap::class, self::JSON_FORMAT);
     }
 
     /** @test */
@@ -134,7 +137,74 @@ class TypedMapNormalizerTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
 
-        $normalizer->denormalize($data, DummyEntityMap::class, 'json');
+        $normalizer->denormalize($data, DummyEntityMap::class, self::JSON_FORMAT);
+    }
+
+    /**
+     * @test
+     * @dataProvider supportedNormalizationFormatProvider
+     */
+    public function supportsNormalization_notATypedMapInterfaceAndSupportedFormat_falseReturned(string $format): void
+    {
+        $normalizer = $this->createMapNormalizer();
+
+        $supports = $normalizer->supportsNormalization(new \stdClass(), $format);
+
+        $this->assertFalse($supports);
+    }
+
+    /**
+     * @test
+     */
+    public function supportsNormalization_TypedMapInterfaceAndNotSupportedFormat_falseReturned(): void
+    {
+        $normalizer = $this->createMapNormalizer();
+
+        $supports = $normalizer->supportsNormalization(new DummyPrimitiveMap(), 'format');
+
+        $this->assertFalse($supports);
+    }
+
+    /**
+     * @test
+     * @dataProvider supportedNormalizationFormatProvider
+     */
+    public function supportsNormalization_typedMapInterfaceAndFormat_trueReturned(string $format): void
+    {
+        $normalizer = $this->createMapNormalizer();
+
+        $supports = $normalizer->supportsNormalization(new DummyPrimitiveMap(), $format);
+
+        $this->assertTrue($supports);
+    }
+
+    public function supportedNormalizationFormatProvider(): \Iterator
+    {
+        yield 'json format' => [self::JSON_FORMAT];
+        yield 'jsonld format' => [self::JSON_LD_FORMAT];
+    }
+
+    /** @test */
+    public function normalize_emptyMap_arrayObjectReturned(): void
+    {
+        $normalizer = $this->createMapNormalizer();
+
+        $map = $normalizer->normalize(new DummyPrimitiveMap(), self::JSON_FORMAT);
+
+        $this->assertInstanceOf(\ArrayObject::class, $map);
+    }
+
+    /** @test */
+    public function normalize_map_arrayReturned(): void
+    {
+        $normalizer    = $this->createMapNormalizer();
+        $expectedArray = ['key' => 'value'];
+        $map           = new DummyPrimitiveMap($expectedArray);
+
+        $map = $normalizer->normalize($map, self::JSON_FORMAT);
+
+        $this->assertIsArray($map);
+        $this->assertSame($expectedArray, $map);
     }
 
     private function givenDenormalizer_denormalize_returnItem($item): void
@@ -147,7 +217,7 @@ class TypedMapNormalizerTest extends TestCase
     private function assertDenormalizer_denormalize_wasCalledOnceWithDataAndType(array $data, string $type): void
     {
         \Phake::verify($this->denormalizer)
-            ->denormalize($data, $type, 'json', []);
+            ->denormalize($data, $type, self::JSON_FORMAT, []);
     }
 
     private function createMapNormalizer(): TypedMapNormalizer
