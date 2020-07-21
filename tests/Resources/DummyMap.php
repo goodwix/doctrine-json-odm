@@ -3,6 +3,7 @@
 namespace Goodwix\DoctrineJsonOdm\Tests\Resources;
 
 use Ramsey\Collection\Map\AbstractTypedMap;
+use Ramsey\Collection\Map\MapInterface;
 
 class DummyMap extends AbstractTypedMap
 {
@@ -13,6 +14,6 @@ class DummyMap extends AbstractTypedMap
 
     public function getValueType(): string
     {
-        return AbstractTypedMap::class;
+        return MapInterface::class;
     }
 }

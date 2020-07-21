@@ -27,6 +27,13 @@ class MapSerializationTest extends SerializerTestCase
         yield 'primitive map' => [new DummyPrimitiveMap(['key' => 'value']), '{"key":"value"}'];
         yield 'entity map' => [new DummyEntityMap(['key' => new DummyEntity()]), '{"key":{"field":null}}'];
         yield 'empty map' => [new DummyPrimitiveMap(), '{}'];
-        yield 'map with inner entity map' => [new DummyMap(['key' => new DummyEntityMap(['inner' => new DummyEntity()])]), '{"key":{"inner":{"field":null}}}'];
+        yield 'map with inner entity map' => [
+            new DummyMap([
+                'key' => new DummyEntityMap([
+                    'inner' => new DummyEntity(),
+                ]),
+            ]),
+            '{"key":{"inner":{"field":null}}}',
+        ];
     }
 }
