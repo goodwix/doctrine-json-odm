@@ -7,8 +7,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class SerializerTestCase extends KernelTestCase
 {
-    protected const JSON_LD_FORMAT = 'jsonld';
-    protected const JSON_FORMAT    = 'json';
+    protected const JSON_FORMAT = 'json';
 
     /** @var SerializerInterface */
     protected $serializer;

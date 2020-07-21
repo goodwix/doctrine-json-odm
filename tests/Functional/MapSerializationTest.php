@@ -8,7 +8,7 @@ use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyPrimitiveMap;
 use Goodwix\DoctrineJsonOdm\Tests\TestCase\SerializerTestCase;
 use Ramsey\Collection\Map\TypedMapInterface;
 
-class SerializationMapTest extends SerializerTestCase
+class MapSerializationTest extends SerializerTestCase
 {
     /**
      * @test

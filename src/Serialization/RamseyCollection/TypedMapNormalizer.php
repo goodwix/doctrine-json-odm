@@ -25,11 +25,6 @@ class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInte
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
 
-    protected const SUPPORTED_NORMALIZATION_FORMATS = [
-        'jsonld',
-        'json',
-    ];
-
     public function supportsDenormalization($data, $type, $format = null): bool
     {
         $supports = false;
@@ -62,7 +57,7 @@ class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInte
 
     public function supportsNormalization($data, $format = null)
     {
-        return $data instanceof TypedMapInterface && in_array($format, self::SUPPORTED_NORMALIZATION_FORMATS, true);
+        return $data instanceof TypedMapInterface;
     }
 
     public function normalize($object, $format = null, array $context = [])

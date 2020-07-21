@@ -21,8 +21,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class TypedMapNormalizerTest extends TestCase
 {
-    protected const JSON_LD_FORMAT = 'jsonld';
-    protected const JSON_FORMAT    = 'json';
+    protected const JSON_FORMAT = 'json';
 
     /** @var DenormalizerInterface */
     private $denormalizer;
@@ -142,13 +141,12 @@ class TypedMapNormalizerTest extends TestCase
 
     /**
      * @test
-     * @dataProvider supportedNormalizationFormatProvider
      */
-    public function supportsNormalization_notATypedMapInterfaceAndSupportedFormat_falseReturned(string $format): void
+    public function supportsNormalization_notATypedMapInterface_falseReturned(): void
     {
         $normalizer = $this->createMapNormalizer();
 
-        $supports = $normalizer->supportsNormalization(new \stdClass(), $format);
+        $supports = $normalizer->supportsNormalization(new \stdClass());
 
         $this->assertFalse($supports);
     }
@@ -156,32 +154,13 @@ class TypedMapNormalizerTest extends TestCase
     /**
      * @test
      */
-    public function supportsNormalization_TypedMapInterfaceAndNotSupportedFormat_falseReturned(): void
+    public function supportsNormalization_typedMapInterface_trueReturned(): void
     {
         $normalizer = $this->createMapNormalizer();
 
-        $supports = $normalizer->supportsNormalization(new DummyPrimitiveMap(), 'format');
-
-        $this->assertFalse($supports);
-    }
-
-    /**
-     * @test
-     * @dataProvider supportedNormalizationFormatProvider
-     */
-    public function supportsNormalization_typedMapInterfaceAndFormat_trueReturned(string $format): void
-    {
-        $normalizer = $this->createMapNormalizer();
-
-        $supports = $normalizer->supportsNormalization(new DummyPrimitiveMap(), $format);
+        $supports = $normalizer->supportsNormalization(new DummyPrimitiveMap());
 
         $this->assertTrue($supports);
-    }
-
-    public function supportedNormalizationFormatProvider(): \Iterator
-    {
-        yield 'json format' => [self::JSON_FORMAT];
-        yield 'jsonld format' => [self::JSON_LD_FORMAT];
     }
 
     /** @test */
@@ -189,7 +168,7 @@ class TypedMapNormalizerTest extends TestCase
     {
         $normalizer = $this->createMapNormalizer();
 
-        $map = $normalizer->normalize(new DummyPrimitiveMap(), self::JSON_FORMAT);
+        $map = $normalizer->normalize(new DummyPrimitiveMap());
 
         $this->assertInstanceOf(\ArrayObject::class, $map);
     }
