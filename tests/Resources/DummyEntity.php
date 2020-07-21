@@ -10,4 +10,5 @@ namespace Goodwix\DoctrineJsonOdm\Tests\Resources;
 
 class DummyEntity
 {
+    public $field;
 }

@@ -11,16 +11,16 @@ namespace Goodwix\DoctrineJsonOdm\Serialization\RamseyCollection;
 use Ramsey\Collection\Exception\InvalidArgumentException as RamseyInvalidArgumentException;
 use Ramsey\Collection\Map\MapInterface;
 use Ramsey\Collection\Map\TypedMapInterface;
-use Symfony\Component\Serializer\Encoder\NormalizationAwareInterface;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInterface, NormalizerInterface, NormalizationAwareInterface
+class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInterface, NormalizerInterface, NormalizerAwareInterface
 {
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
@@ -65,7 +65,11 @@ class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInte
         $normalizedMap = null;
 
         if (count($object) > 0) {
-            $normalizedMap = $object->toArray();
+            $normalizedMap = [];
+
+            foreach ($object as $key => $value) {
+                $normalizedMap[$key] = $this->normalizer->normalize($value, $format, $context);
+            }
         } else {
             $normalizedMap = new \ArrayObject();
         }
