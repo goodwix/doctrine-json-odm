@@ -4,6 +4,7 @@ namespace Goodwix\DoctrineJsonOdm\Tests\Functional;
 
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntity;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyEntityMap;
+use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyMap;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\DummyPrimitiveMap;
 use Goodwix\DoctrineJsonOdm\Tests\TestCase\SerializerTestCase;
 use Ramsey\Collection\Map\TypedMapInterface;
@@ -26,5 +27,6 @@ class MapSerializationTest extends SerializerTestCase
         yield 'primitive map' => [new DummyPrimitiveMap(['key' => 'value']), '{"key":"value"}'];
         yield 'entity map' => [new DummyEntityMap(['key' => new DummyEntity()]), '{"key":{"field":null}}'];
         yield 'empty map' => [new DummyPrimitiveMap(), '{}'];
+        yield 'map with inner entity map' => [new DummyMap(['key' => new DummyEntityMap(['inner' => new DummyEntity()])]), '{"key":{"inner":{"field":null}}}'];
     }
 }

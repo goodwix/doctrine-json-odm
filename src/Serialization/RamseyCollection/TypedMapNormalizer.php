@@ -25,8 +25,6 @@ class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInte
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
 
-    private const TYPED_MAP_NORMALIZER_ALREADY_CALLED = 'TYPED_MAP_NORMALIZER_ALREADY_CALLED';
-
     public function supportsDenormalization($data, $type, $format = null): bool
     {
         $supports = false;
@@ -57,23 +55,21 @@ class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInte
         return $map;
     }
 
-    public function supportsNormalization($data, $format = null, array $context = [])
+    public function supportsNormalization($data, $format = null)
     {
-        if (isset($context[self::TYPED_MAP_NORMALIZER_ALREADY_CALLED])) {
-            return false;
-        }
-
         return $data instanceof TypedMapInterface;
     }
 
     public function normalize($object, $format = null, array $context = [])
     {
-        $context[self::TYPED_MAP_NORMALIZER_ALREADY_CALLED] = true;
-
         $normalizedMap = null;
 
         if (count($object) > 0) {
-            $normalizedMap = $this->normalizer->normalize($object, $format, $context);
+            $normalizedMap = [];
+
+            foreach ($object as $key => $value) {
+                $normalizedMap[$key] = $this->normalizer->normalize($value, $format, $context);
+            }
         } else {
             $normalizedMap = new \ArrayObject();
         }

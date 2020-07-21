@@ -23,6 +23,8 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 class TypedMapNormalizerTest extends TestCase
 {
     protected const JSON_FORMAT = 'json';
+    protected const KEY         = 'key';
+    protected const VALUE       = 'value';
 
     /** @var DenormalizerInterface */
     private $denormalizer;
@@ -71,7 +73,7 @@ class TypedMapNormalizerTest extends TestCase
     {
         $normalizer = $this->createMapNormalizer();
         $data       = [
-            'key' => [
+            self::KEY => [
                 'id',
             ],
         ];
@@ -80,8 +82,8 @@ class TypedMapNormalizerTest extends TestCase
         $map = $normalizer->denormalize($data, DummyEntityMap::class, self::JSON_FORMAT);
 
         $this->assertCount(1, $map);
-        $this->assertInstanceOf(DummyEntity::class, $map->get('key'));
-        $this->assertDenormalizer_denormalize_wasCalledOnceWithDataAndType($data['key'], DummyEntity::class);
+        $this->assertInstanceOf(DummyEntity::class, $map->get(self::KEY));
+        $this->assertDenormalizer_denormalize_wasCalledOnceWithDataAndType($data[self::KEY], DummyEntity::class);
     }
 
     /** @test */
@@ -89,7 +91,7 @@ class TypedMapNormalizerTest extends TestCase
     {
         $normalizer = $this->createMapNormalizer();
         $data       = [
-            'key' => [
+            self::KEY => [
                 'id',
             ],
         ];
@@ -98,8 +100,8 @@ class TypedMapNormalizerTest extends TestCase
         $map = $normalizer->denormalize($data, DummyEntityInterfaceMap::class, self::JSON_FORMAT);
 
         $this->assertCount(1, $map);
-        $this->assertInstanceOf(DummyEntityInterface::class, $map->get('key'));
-        $this->assertDenormalizer_denormalize_wasCalledOnceWithDataAndType($data['key'], DummyEntityInterface::class);
+        $this->assertInstanceOf(DummyEntityInterface::class, $map->get(self::KEY));
+        $this->assertDenormalizer_denormalize_wasCalledOnceWithDataAndType($data[self::KEY], DummyEntityInterface::class);
     }
 
     /** @test */
@@ -183,15 +185,15 @@ class TypedMapNormalizerTest extends TestCase
     public function normalize_map_arrayReturned(): void
     {
         $normalizer    = $this->createMapNormalizer();
-        $expectedArray = ['key' => 'value'];
-        $map           = new DummyPrimitiveMap(['key' => 'value']);
-        $this->givenNormalizer_normalize_returnArray($expectedArray);
+        $expectedArray = [self::KEY => self::VALUE];
+        $map           = new DummyPrimitiveMap($expectedArray);
+        $this->givenNormalizer_normalize_returnData(self::VALUE);
 
         $normalizedMap = $normalizer->normalize($map, self::JSON_FORMAT);
 
         $this->assertIsArray($normalizedMap);
         $this->assertSame($expectedArray, $normalizedMap);
-        $this->assertNormalizer_normalize_wasCalledOnceWithObject($map);
+        $this->assertNormalizer_normalize_wasCalledOnceWithObject(self::VALUE);
     }
 
     private function createMapNormalizer(): TypedMapNormalizer
@@ -222,7 +224,7 @@ class TypedMapNormalizerTest extends TestCase
             ->denormalize(\Phake::anyParameters());
     }
 
-    private function givenNormalizer_normalize_returnArray(array $data = []): void
+    private function givenNormalizer_normalize_returnData($data): void
     {
         \Phake::when($this->normalizer)
             ->normalize(\Phake::anyParameters())
@@ -232,10 +234,7 @@ class TypedMapNormalizerTest extends TestCase
     private function assertNormalizer_normalize_wasCalledOnceWithObject($object): void
     {
         \Phake::verify($this->normalizer)
-            ->normalize($object, self::JSON_FORMAT, \Phake::capture($context));
-
-        $this->assertArrayHasKey('TYPED_MAP_NORMALIZER_ALREADY_CALLED', $context);
-        $this->assertTrue($context['TYPED_MAP_NORMALIZER_ALREADY_CALLED']);
+            ->normalize($object, self::JSON_FORMAT, []);
     }
 
     private function assertNormalizer_normalize_wasNeverCalled(): void
