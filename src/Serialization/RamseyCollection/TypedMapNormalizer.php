@@ -60,7 +60,7 @@ class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInte
         return $map;
     }
 
-    public function supportsNormalization($data, ?string $format = null)
+    public function supportsNormalization($data, $format = null)
     {
         return $data instanceof TypedMapInterface && in_array($format, self::SUPPORTED_NORMALIZATION_FORMATS, true);
     }
