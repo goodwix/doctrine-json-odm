@@ -8,10 +8,6 @@
 
 namespace Goodwix\DoctrineJsonOdm\Type;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\JsonType;
-use Goodwix\DoctrineJsonOdm\Exception\JsonOdmException;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ODMType extends AbstractODMType

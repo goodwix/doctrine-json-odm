@@ -124,7 +124,7 @@ abstract class AbstractODMType extends JsonType
     /**
      * @throws JsonOdmException
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?object
+    public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if (null === $value || '' === $value) {
             return null;

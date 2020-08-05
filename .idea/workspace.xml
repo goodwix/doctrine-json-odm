@@ -2,21 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca02068d-141c-4593-97ce-16ad33716c14" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.docker/usr/local/etc/php/php.ini" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/phpstan.neon.dist" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/Functional/MapSerializationTest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/Resources/DummyMap.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/TestCase/SerializerTestCase.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/test.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/test.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/easy-coding-standard.yml" beforeDir="false" afterPath="$PROJECT_DIR$/easy-coding-standard.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Serialization/RamseyCollection/TypedMapNormalizer.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Serialization/RamseyCollection/TypedMapNormalizer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Type/AbstractODMType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Type/AbstractODMType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Resources/DummyEntity.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Resources/DummyEntity.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Unit/Serialization/RamseyCollection/TypedMapNormalizerTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Unit/Serialization/RamseyCollection/TypedMapNormalizerTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Type/ODMArrayType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Type/ODMArrayType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Type/ODMType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Type/ODMType.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,13 +145,15 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/tests/Functional" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tests/Functional" />
+      <recent name="$PROJECT_DIR$/tests/Resources/Symfony/TestBundle/Entity" />
       <recent name="$PROJECT_DIR$/src/Type" />
     </key>
   </component>
@@ -186,7 +177,7 @@
       <workItem from="1592842039731" duration="5495000" />
       <workItem from="1592905442687" duration="3059000" />
       <workItem from="1592982018779" duration="3677000" />
-      <workItem from="1596632506621" duration="416000" />
+      <workItem from="1596632506621" duration="1626000" />
     </task>
     <servers />
   </component>
@@ -210,9 +201,9 @@
       <screen x="0" y="0" width="3440" height="1440" />
     </state>
     <state x="1426" y="475" width="655" height="490" key="find.popup/3440.0.2560.1440/0.0.3440.1440/-2560.0.2560.1440@0.0.3440.1440" timestamp="1593115345251" />
-    <state x="1383" y="329" width="672" height="678" key="search.everywhere.popup" timestamp="1596632673205">
+    <state x="1383" y="329" width="672" height="678" key="search.everywhere.popup" timestamp="1596634188555">
       <screen x="0" y="0" width="3440" height="1440" />
     </state>
-    <state x="1383" y="329" width="672" height="678" key="search.everywhere.popup/3440.0.2560.1440/0.0.3440.1440/-2560.0.2560.1440@0.0.3440.1440" timestamp="1596632673205" />
+    <state x="1383" y="329" width="672" height="678" key="search.everywhere.popup/3440.0.2560.1440/0.0.3440.1440/-2560.0.2560.1440@0.0.3440.1440" timestamp="1596634188555" />
   </component>
 </project>
