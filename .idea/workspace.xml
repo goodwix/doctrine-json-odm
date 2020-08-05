@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca02068d-141c-4593-97ce-16ad33716c14" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Type/AbstractODMType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Type/AbstractODMType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Type/ODMArrayType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Type/ODMArrayType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Type/ODMType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Type/ODMType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/Functional/DocumentsArrayTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Functional/DocumentsArrayTest.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,7 +174,7 @@
       <workItem from="1592842039731" duration="5495000" />
       <workItem from="1592905442687" duration="3059000" />
       <workItem from="1592982018779" duration="3677000" />
-      <workItem from="1596632506621" duration="1626000" />
+      <workItem from="1596632506621" duration="1750000" />
     </task>
     <servers />
   </component>

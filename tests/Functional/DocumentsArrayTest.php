@@ -17,10 +17,10 @@ class DocumentsArrayTest extends FunctionalTestCase
     /** @test */
     public function persist_entityWithOdmObject_entityIsSavedWithValidJsonField(): void
     {
-        $manager  = $this->getEntityManager();
-        $document = $this->givenJsonOdmDocument();
+        $manager   = $this->getEntityManager();
+        $document  = $this->givenJsonOdmDocument();
         $document2 = $this->givenSecondJsonOdmDocument();
-        $storage  = $this->givenDocumentStorageEntity($document, $document2);
+        $storage   = $this->givenDocumentStorageEntity($document, $document2);
 
         $manager->persist($storage);
         $manager->flush();
@@ -90,7 +90,7 @@ class DocumentsArrayTest extends FunctionalTestCase
 
     private function givenDocumentStorageEntity(Document $document, Document $document2): DocumentArrayStorage
     {
-        $storage           = new DocumentArrayStorage();
+        $storage            = new DocumentArrayStorage();
         $storage->documents = [$document, $document2];
 
         return $storage;
@@ -110,9 +110,9 @@ class DocumentsArrayTest extends FunctionalTestCase
 
     private function givenDocumentStorageEntityIdWithDocumentInDatabase(): int
     {
-        $document = $this->givenJsonOdmDocument();
+        $document  = $this->givenJsonOdmDocument();
         $document2 = $this->givenSecondJsonOdmDocument();
-        $storage  = $this->givenDocumentStorageEntity($document, $document2);
+        $storage   = $this->givenDocumentStorageEntity($document, $document2);
 
         $manager = $this->getEntityManager();
         $manager->persist($storage);
