@@ -1,0 +1,10 @@
+/.gitattributes export-ignore
+/.github export-ignore
+/.gitignore export-ignore
+/.scrutinizer export-ignore
+/docker-compose.yml export-ignore
+/Dockerfile export-ignore
+/easy-coding-standard export-ignore
+/phpstan.neon.dist export-ignore
+/phpunit.xml.dist export-ignore
+/tests export-ignore

@@ -22,7 +22,7 @@ abstract class AbstractODMType extends JsonType
     private $serializer;
 
     /** @var string */
-    protected $format = 'json';
+    private $format = 'json';
 
     /** @var string */
     private $entityClass;
@@ -101,8 +101,6 @@ abstract class AbstractODMType extends JsonType
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws JsonOdmException
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
@@ -124,11 +122,9 @@ abstract class AbstractODMType extends JsonType
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws JsonOdmException
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?object
     {
         if (null === $value || '' === $value) {
             return null;

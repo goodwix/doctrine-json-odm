@@ -1,0 +1,7 @@
+parameters:
+    excludes_analyse:
+        - ./src/Bridge/Symfony/DependencyInjection/Configuration.php
+
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon

@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: composer install
 
+      - name: Lint
+        run: composer lint
+
       - name: Unit test
         run: ./vendor/bin/phpunit
         env:
@@ -42,7 +45,7 @@ jobs:
 
     strategy:
       matrix:
-        symfony: ['4.3.*', '4.4.*', '5.0.*']
+        symfony: ['4.3.*', '4.4.*', '5.0.*', '5.1.*']
 
     services:
       postgres:

@@ -16,10 +16,14 @@ use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInterface
+class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInterface, NormalizerInterface, NormalizerAwareInterface
 {
     use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
 
     public function supportsDenormalization($data, $type, $format = null): bool
     {
@@ -49,6 +53,28 @@ class TypedMapNormalizer implements DenormalizerInterface, DenormalizerAwareInte
         }
 
         return $map;
+    }
+
+    public function supportsNormalization($data, $format = null)
+    {
+        return $data instanceof TypedMapInterface;
+    }
+
+    public function normalize($object, $format = null, array $context = [])
+    {
+        $normalizedMap = null;
+
+        if (count($object) > 0) {
+            $normalizedMap = [];
+
+            foreach ($object as $key => $value) {
+                $normalizedMap[$key] = $this->normalizer->normalize($value, $format, $context);
+            }
+        } else {
+            $normalizedMap = new \ArrayObject();
+        }
+
+        return $normalizedMap;
     }
 
     private function createAndFillMap(array $data, string $class, ?string $format, array $context): TypedMapInterface

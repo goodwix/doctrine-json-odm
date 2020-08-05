@@ -1,10 +1,3 @@
-imports:
-  - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/clean-code.yml' }
-  - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/common.yml' }
-  - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/php71.yml' }
-  - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/psr12.yml' }
-  - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/symfony.yml' }
-
 services:
   PhpCsFixer\Fixer\PhpUnit\PhpUnitTestAnnotationFixer:
     style: 'annotation'
@@ -13,11 +6,22 @@ services:
     align_equals: true
 
 parameters:
+  sets:
+    - 'clean-code'
+    - 'common'
+    - 'dead-code'
+    - 'psr12'
+    - 'php71'
+    - 'symfony'
+    - 'symfony-risky'
+
   exclude_files:
     - 'src/Bridge/Symfony/DependencyInjection/Configuration.php'
-  exclude_checkers:
-    - PhpCsFixer\Fixer\PhpUnit\PhpUnitMethodCasingFixer
-    - PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer
-    - SlevomatCodingStandard\Sniffs\TypeHints\NullableTypeForNullDefaultValueSniff
-    - PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer
-    - SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff
+  skip:
+    PHP_CodeSniffer\Standards\Squiz\Sniffs\Functions\MultiLineFunctionDeclarationSniff.CloseBracketLine: ~
+    PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer: ~
+    PhpCsFixer\Fixer\PhpUnit\PhpUnitMethodCasingFixer: ~
+    PhpCsFixer\Fixer\Phpdoc\PhpdocLineSpanFixer: ~
+    PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer: ~
+    SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff: ~
+    SlevomatCodingStandard\Sniffs\Whitespaces\DuplicateSpacesSniff.DuplicateSpaces: ~
