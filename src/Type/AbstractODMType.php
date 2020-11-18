@@ -143,4 +143,12 @@ abstract class AbstractODMType extends JsonType
     }
 
     abstract public static function registerODMType(string $entityClass, SerializerInterface $serializer): void;
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    {
+        return true;
+    }
 }
