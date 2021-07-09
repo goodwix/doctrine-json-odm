@@ -6,5 +6,9 @@
             <argument type="service" id="annotation_reader"/>
             <argument type="collection"/>
         </service>
+        <service id="goodwix.doctrine_json_odm.listener.entity_with_odm_pre_flush" class="Goodwix\DoctrineJsonOdm\EventListener\EntityWithOdmPreFlushListener" public="true">
+            <argument type="service" id="property_accessor"/>
+            <tag name="doctrine.event_listener" event="preFlush" connection="default"/>
+        </service>
     </services>
 </container>
