@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.3 || ^8.0",
         "ext-json": "*",
         "doctrine/orm": "^2.5",
         "symfony/property-access": "^4.3|^5.0",

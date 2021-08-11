@@ -23,6 +23,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+        with:
+          php_version: 7.1
+
       - name: Validate composer.json
         run: composer validate
 
@@ -45,7 +50,8 @@ jobs:
 
     strategy:
       matrix:
-        symfony: ['4.3.*', '4.4.*', '5.0.*', '5.1.*']
+        symfony: ['4.4.*', '5.2.*', '5.3.*']
+        php: ['7.4', '8.0']
 
     services:
       postgres:
@@ -59,6 +65,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+        with:
+          php_version: ${{ matrix.php }}
 
       - name: Install specific symfony version
         run: composer require
