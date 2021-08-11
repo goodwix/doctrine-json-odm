@@ -10,6 +10,7 @@ namespace Goodwix\DoctrineJsonOdm\Tests\Functional;
 
 use Goodwix\DoctrineJsonOdm\Tests\Resources\Symfony\TestBundle\Entity\EmbeddedDocumentStorage;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\Symfony\TestBundle\ODM\Document;
+use Goodwix\DoctrineJsonOdm\Tests\Resources\Symfony\TestBundle\ODM\DocumentCollection;
 use Goodwix\DoctrineJsonOdm\Tests\Resources\Symfony\TestBundle\ODM\DocumentHolder;
 use Goodwix\DoctrineJsonOdm\Tests\TestCase\FunctionalTestCase;
 
@@ -87,10 +88,10 @@ class EmbeddedDocumentTest extends FunctionalTestCase
 
         $holder               = new DocumentHolder();
         $holder->mainDocument = $mainDocument;
-        $holder->documents    = [
+        $holder->documents    = new DocumentCollection([
             $document1,
             $document2,
-        ];
+        ]);
 
         $storage                 = new EmbeddedDocumentStorage();
         $storage->documentHolder = $holder;

@@ -17,6 +17,5 @@ class DocumentHolder
 {
     public Document $mainDocument;
 
-    /** @var Document[] */
-    public $documents;
+    public DocumentCollection $documents;
 }
