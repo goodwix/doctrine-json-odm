@@ -63,11 +63,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install dependencies
-        uses: php-actions/composer@v6
-        with:
-          php_version: ${{ matrix.php }}
-
       - name: Install specific symfony version
         run: composer require
           symfony/property-access:${{ matrix.symfony }}
@@ -75,6 +70,11 @@ jobs:
           symfony/serializer:${{ matrix.symfony }}
           symfony/framework-bundle:${{ matrix.symfony }}
           symfony/expression-language:${{ matrix.symfony }}
+
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+        with:
+          php_version: ${{ matrix.php }}
 
       - name: Unit test
         run: ./vendor/bin/phpunit
