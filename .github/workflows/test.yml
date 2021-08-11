@@ -31,9 +31,6 @@ jobs:
       - name: Validate composer.json
         run: composer validate
 
-      - name: Install dependencies
-        run: composer install
-
       - name: Lint
         run: composer lint
 
@@ -78,9 +75,6 @@ jobs:
           symfony/serializer:${{ matrix.symfony }}
           symfony/framework-bundle:${{ matrix.symfony }}
           symfony/expression-language:${{ matrix.symfony }}
-
-      - name: Install all dependencies
-        run: composer install
 
       - name: Unit test
         run: ./vendor/bin/phpunit
