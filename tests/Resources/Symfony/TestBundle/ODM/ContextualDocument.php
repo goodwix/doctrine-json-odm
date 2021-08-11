@@ -25,13 +25,10 @@ class ContextualDocument
 {
     /**
      * @Groups({"fromDatabase", "toDatabase"})
-     *
-     * @var string
      */
-    public $title;
+    public string $title;
 
-    /** @var string */
-    private $readOnlyProperty;
+    private string $readOnlyProperty;
 
     public function __construct(string $title, string $readOnlyProperty = '')
     {

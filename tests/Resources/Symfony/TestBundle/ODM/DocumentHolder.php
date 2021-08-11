@@ -15,8 +15,7 @@ use Goodwix\DoctrineJsonOdm\Annotation\ODM;
  */
 class DocumentHolder
 {
-    /** @var Document */
-    public $mainDocument;
+    public Document $mainDocument;
 
     /** @var Document[] */
     public $documents;

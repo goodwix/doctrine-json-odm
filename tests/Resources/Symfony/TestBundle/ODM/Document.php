@@ -15,9 +15,7 @@ use Goodwix\DoctrineJsonOdm\Annotation\ODM;
  */
 class Document
 {
-    /** @var string */
-    public $title;
+    public string $title;
 
-    /** @var string */
-    public $description;
+    public string $description;
 }
