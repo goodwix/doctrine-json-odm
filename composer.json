@@ -14,14 +14,14 @@
         "php": "^7.4|^8.0",
         "ext-json": "*",
         "doctrine/orm": "^2.5",
-        "symfony/property-access": "^4.3|^5.0",
-        "symfony/property-info": "^4.3|^5.0",
-        "symfony/serializer": "^4.3|^5.0"
+        "symfony/property-access": "^4.3|^5.0|^6.0",
+        "symfony/property-info": "^4.3|^5.0|^6.0",
+        "symfony/serializer": "^4.3|^5.0|^6.0"
     },
     "require-dev": {
         "doctrine/doctrine-bundle": "^2.0",
-        "symfony/framework-bundle": "^5.0",
-        "symfony/expression-language": "^5.0",
+        "symfony/framework-bundle": "^5.0|^6.0",
+        "symfony/expression-language": "^5.0|^6.0",
         "symplify/easy-coding-standard": "^9.0",
         "phake/phake": "^4.0",
         "phpunit/phpunit": "^9.0",
