@@ -1,5 +1,5 @@
 parameters:
-    excludes_analyse:
+    excludePaths:
         - ./src/Bridge/Symfony/DependencyInjection/Configuration.php
 
 includes:

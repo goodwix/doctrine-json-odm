@@ -16,7 +16,7 @@ class SerializerTestCase extends KernelTestCase
     {
         $kernel = self::bootKernel();
 
-        $container = $kernel->getContainer();
+        $container = static::getContainer();
 
         $this->serializer = $container->get('serializer');
     }

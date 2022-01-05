@@ -47,7 +47,7 @@ jobs:
 
     strategy:
       matrix:
-        symfony: ['4.4.*', '5.2.*', '5.3.*']
+        symfony: ['5.3.*', '5.4.*', '6.0.*']
         php: ['8.0']
 
     services:
