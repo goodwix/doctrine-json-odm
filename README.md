@@ -20,7 +20,7 @@ This is beta version of library. Main differences from Dunglas library:
 * Object-Document Mapping with database json types
 * Doctrine 2.5+ support
 * PostgreSQL 9.4+ support
-* Symfony 4+ support (not tested with Symfony 2 and 3)
+* Symfony 5+ support (not tested with previous versions)
 * MySQL support not tested
 
 ## Additional features
