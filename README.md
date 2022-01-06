@@ -149,6 +149,59 @@ ODMType::registerODMType(
 
 You can see example of Symfony 4 application with using ODM library in this [directory](https://github.com/goodwix/doctrine-json-odm/tree/master/tests/Resources/Symfony).
 
+## Deal with abstract
+
+As an `abstract` class could not be created as an instance, each concrete children have to be mapped into the abstract class.
+
+Indeed, the `Symfony Serializer` must know the real type in this case through a discriminator field to determine the real object behind
+the stored data. For that, it use `Symfony\Component\Serializer\Annotation\DiscriminatorMap`. More info is available [here](
+Maybe this way : [Symfony serializer : discriminator](https://symfony.com/doc/current/components/serializer.html#serializing-)
+
+For example, if we have an abstract and 2 children
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Whatever;
+
+use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
+
+#### PHP8 Attribute ####
+#[DiscriminatorMap(
+    typeProperty: 'type',
+    mapping: [
+        'myChildTypeName' => 'App\Whatever\Child',
+        'myChild2TypeName' => 'App\Whatever\Child2',
+    ]
+)]
+####> PHP8 Attribute ####
+
+
+#### PHP < PHP8 ####
+/**
+ * @DiscriminatorMap(typeProperty="type", mapping={
+ *    "myChildTypeName"="App\Whatever\Child",
+ *    "myChild2TypeName"="App\Whatever\Child2"
+ * })
+ */
+####> PHP < PHP8 ####
+
+
+abstract class MyAbstract
+{
+}
+
+class Child extends MyAbstract
+{}
+
+
+class Child2 extends MyAbstract
+{}
+```
+
+
 ## Contribution
 
 You can run `composer lint` before pushing to repository to ensure that there are no code style errors.
