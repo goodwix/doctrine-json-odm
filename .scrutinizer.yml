@@ -10,6 +10,7 @@ build:
     tests:
       environment:
         variables:
+          XDEBUG_MODE: 'coverage'
           DATABASE_HOST: 'localhost'
           DATABASE_DBNAME: 'scrutinizer'
           DATABASE_USER: 'scrutinizer'
