@@ -10,6 +10,7 @@ namespace Goodwix\DoctrineJsonOdm\Service;
 
 use Doctrine\Common\Annotations\Reader;
 use Goodwix\DoctrineJsonOdm\Annotation\ODM;
+use Goodwix\DoctrineJsonOdm\Type\ODMArrayType;
 use Goodwix\DoctrineJsonOdm\Type\ODMType;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -69,9 +70,15 @@ class ODMAutoRegistrar
     private function registerODMType(string $entityClass, ODM $annotation): void
     {
         ODMType::registerODMType($entityClass, $this->serializer);
+        ODMArrayType::registerODMType($entityClass, $this->serializer);
 
         /** @var ODMType $type */
         $type = ODMType::getType($entityClass);
+        $type->setSerializationContext($annotation->serializationContext);
+        $type->setDeserializationContext($annotation->deserializationContext);
+
+        /** @var ODMArrayType $type */
+        $type = ODMArrayType::getType(sprintf('%s[]', $entityClass));
         $type->setSerializationContext($annotation->serializationContext);
         $type->setDeserializationContext($annotation->deserializationContext);
     }

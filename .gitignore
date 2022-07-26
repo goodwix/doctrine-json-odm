@@ -1,3 +1,5 @@
+.idea
+
 # Specific for Symfony Bundle
 composer.lock
 symfony.lock
