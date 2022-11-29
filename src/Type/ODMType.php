@@ -134,7 +134,7 @@ class ODMType extends JsonType
             $context = $this->getDeserializationContext();
             $value   = $this->getSerializer()->deserialize($value, $this->getEntityClass(), $this->format, $context);
         } catch (ExceptionInterface $exception) {
-            $message = sprintf('Deserialization exception occurred for class "%s". (%s)', $this->getEntityClass(), $exception->getMessage());
+            $message = sprintf('Deserialization exception occurred for class "%s": %s.', $this->getEntityClass(), $exception->getMessage());
 
             throw new JsonOdmException($message, 0, $exception);
         }
