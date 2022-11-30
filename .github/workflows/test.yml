@@ -68,6 +68,7 @@ jobs:
           symfony/property-access:${{ matrix.symfony }}
           symfony/property-info:${{ matrix.symfony }}
           symfony/serializer:${{ matrix.symfony }}
+          symfony/console:${{ matrix.symfony }}
           symfony/framework-bundle:${{ matrix.symfony }}
           symfony/expression-language:${{ matrix.symfony }}
 
