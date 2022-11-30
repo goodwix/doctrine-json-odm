@@ -19,7 +19,7 @@
         "symfony/serializer": "^4.4|^5.3|^6.0"
     },
     "require-dev": {
-        "doctrine/doctrine-bundle": "^2.6",
+        "doctrine/doctrine-bundle": "^2.5",
         "symfony/framework-bundle": "^5.3|^6.0",
         "symfony/expression-language": "^5.3|^6.0",
         "symplify/easy-coding-standard": "^9.0",
