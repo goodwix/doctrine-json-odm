@@ -173,7 +173,7 @@ class ODMTypeTest extends TestCase
 
         $this->assertSerializer_serialize_wasCalledOnceWithObjectAndFormatAndContext($object, self::JSON_FORMAT);
         $this->assertInstanceOf(JsonOdmException::class, $exception);
-        $this->assertSame('Serialization exception occurred for class "entity_class". ()', $exception->getMessage());
+        $this->assertSame('Serialization exception occurred for class "entity_class": internal exception.', $exception->getMessage());
         $this->assertSame($serializerException, $exception->getPrevious());
     }
 
@@ -229,7 +229,7 @@ class ODMTypeTest extends TestCase
             self::JSON_FORMAT
         );
         $this->assertInstanceOf(JsonOdmException::class, $exception);
-        $this->assertSame('Deserialization exception occurred for class "entity_class". ()', $exception->getMessage());
+        $this->assertSame('Deserialization exception occurred for class "entity_class": internal exception.', $exception->getMessage());
         $this->assertSame($serializerException, $exception->getPrevious());
     }
 
@@ -352,6 +352,7 @@ class ODMTypeTest extends TestCase
     private function givenSerializerException(): ExceptionInterface
     {
         return new class() extends \Exception implements ExceptionInterface {
+            protected $message = 'internal exception';
         };
     }
 }
